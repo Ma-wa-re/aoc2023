@@ -1,5 +1,5 @@
-fn main() {
-    let lines = include_str!("codes");
+pub fn run() {
+    let lines = include_str!("input");
     println!("Part 1!");
     part_1(lines);
     println!("Part 2!");
