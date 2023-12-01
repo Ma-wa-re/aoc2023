@@ -6,29 +6,34 @@ fn main() {
     part_2(lines);
 }
 
+fn calc_number(line: &str) -> u32 {
+    let mut num_chars: Vec<char> = Vec::new();
+    let char_vec: Vec<char> = line.chars().collect();
+
+    for value in char_vec {
+        if value.is_numeric() {
+            num_chars.push(value);
+        }
+    }
+
+    let first_num: &char = &num_chars[0];
+    let last_num: &char = &num_chars[num_chars.len()-1];
+    let mut s: String = String::new();
+    s.push(*first_num);
+    s.push(*last_num);
+    let number: u32 = match s.trim().parse() {
+        Ok(num) => num,
+        Err(_) => panic!(),
+    };
+
+    number
+}
+
 fn part_1(lines: &str) {
     let mut sum_total: u32 = 0;
 
     for line in lines.lines() {
-        let mut num_chars: Vec<char> = Vec::new();
-        let char_vec: Vec<char> = line.chars().collect();
-
-        for value in char_vec {
-            if value.is_numeric() {
-                num_chars.push(value);
-            }
-        }
-
-        let first_num: &char = &num_chars[0];
-        let last_num: &char = &num_chars[num_chars.len()-1];
-        let mut s: String = String::new();
-        s.push(*first_num);
-        s.push(*last_num);
-        let number: u32 = match s.trim().parse() {
-            Ok(num) => num,
-            Err(_) => panic!(),
-        };
-        sum_total += number;
+        sum_total += calc_number(&line);
     }
 
     println!("Sum of calibration values: {}", sum_total);
@@ -51,26 +56,7 @@ fn part_2(lines: &str) {
 		let line = line.replace("nine", "n9e");
 		let line = line.replace("zero", "z0o");
 
-
-        let mut num_chars: Vec<char> = Vec::new();
-        let char_vec: Vec<char> = line.chars().collect();
-
-        for value in char_vec {
-            if value.is_numeric() {
-                num_chars.push(value);
-            }
-        }
-
-        let first_num: &char = &num_chars[0];
-        let last_num: &char = &num_chars[num_chars.len()-1];
-        let mut s: String = String::new();
-        s.push(*first_num);
-        s.push(*last_num);
-        let number: u32 = match s.trim().parse() {
-            Ok(num) => num,
-            Err(_) => panic!(),
-        };
-        sum_total += number;
+        sum_total += calc_number(&line);
     }
 
     println!("Sum of calibration values: {}", sum_total);
