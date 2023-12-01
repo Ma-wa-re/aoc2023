@@ -46,15 +46,15 @@ fn part_2(lines: &str) {
         // Replace string rep of numbers to one that also has the number
         // I had to see how others did this tho :(
         let line = line.replace("one", "o1e");
-		let line = line.replace("two", "t2o");
-		let line = line.replace("three", "t3e");
-		let line = line.replace("four", "f4r");
-		let line = line.replace("five", "f5e");
-		let line = line.replace("six", "s6x");
-		let line = line.replace("seven", "s7n");
-		let line = line.replace("eight", "e8t");
-		let line = line.replace("nine", "n9e");
-		let line = line.replace("zero", "z0o");
+        let line = line.replace("two", "t2o");
+        let line = line.replace("three", "t3e");
+        let line = line.replace("four", "f4r");
+        let line = line.replace("five", "f5e");
+        let line = line.replace("six", "s6x");
+        let line = line.replace("seven", "s7n");
+        let line = line.replace("eight", "e8t");
+        let line = line.replace("nine", "n9e");
+        let line = line.replace("zero", "z0o");
 
         sum_total += calc_number(&line);
     }
