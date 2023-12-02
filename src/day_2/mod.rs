@@ -13,6 +13,7 @@ pub fn run() {
 fn part_1(input_lines: &Vec<&str>) {
     let mut possible_sum: u32 = 0;
 
+    // Regex for getting game number and cube numbers
     let game_re = Regex::new(r"Game (?<game>\d+):.*").unwrap();
     let red_re = Regex::new(r"(?<red>\d+) red").unwrap();
     let green_re = Regex::new(r"(?<green>\d+) green").unwrap();
@@ -20,6 +21,7 @@ fn part_1(input_lines: &Vec<&str>) {
     
     for l in input_lines {
         
+        // Get a game number from the regex match, it shouldn't be missing but if it is we set it to 0
         let caps = game_re.captures(l).unwrap();
         let game_number: u32 = match caps.name("game") {
             Some(val) => val.as_str().parse().unwrap(),
@@ -28,39 +30,45 @@ fn part_1(input_lines: &Vec<&str>) {
 
         let mut impossible: bool = false;
 
+        // Split string by ; for each set
         for sl in l.split(";") {
+            // Get red number
             let red_number: u32 = match red_re.captures(sl) {
                 Some(caps) => {
                     match caps.name("red") {
-                        Some(val) => val.as_str().parse().unwrap(),
+                        Some(val) => val.as_str().parse().unwrap(), // We know the string is a number due to the regex so we can unwrap from the Ok with no worries of an Err
                         None => 0,
                     }
                 },
                 None => 0,
             };
 
+            // Get green number
             let green_number: u32 = match green_re.captures(sl) {
                 Some(caps) => {
                     match caps.name("green") {
-                        Some(val) => val.as_str().parse().unwrap(),
+                        Some(val) => val.as_str().parse().unwrap(), // We know the string is a number due to the regex so we can unwrap from the Ok with no worries of an Err
                         None => 0,
                     }
                 },
                 None => 0,
             };
 
+            // Get blue number
             let blue_number: u32 = match blue_re.captures(sl) {
                 Some(caps) => {
                     match caps.name("blue") {
-                        Some(val) => val.as_str().parse().unwrap(),
+                        Some(val) => val.as_str().parse().unwrap(), // We know the string is a number due to the regex so we can unwrap from the Ok with no worries of an Err
                         None => 0,
                     }
                 },
                 None => 0,
             };
 
+            // Check if any in the set break the game rules
             if red_number > PART1_RULES.0 || green_number > PART1_RULES.1 || blue_number > PART1_RULES.2 {
                 impossible = true;
+                break;
             }
         }
 
@@ -76,12 +84,14 @@ fn part_1(input_lines: &Vec<&str>) {
 fn part_2(input_lines: &Vec<&str>) {
     let mut power_sum: u32 = 0;
 
+    // Regex for getting cube numbers
     let red_re = Regex::new(r"(?<red>\d+) red").unwrap();
     let green_re = Regex::new(r"(?<green>\d+) green").unwrap();
     let blue_re = Regex::new(r"(?<blue>\d+) blue").unwrap();
 
     for l in input_lines {
 
+        // Set starting vals for min number of each cube
         let mut min_red: u32 = 0;
         let mut min_green: u32 = 0;
         let mut min_blue: u32 = 0;

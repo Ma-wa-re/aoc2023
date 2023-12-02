@@ -1,3 +1,4 @@
+// Public run function that is called to run each days part
 pub fn run() {
     let lines = include_str!("input");
     println!("Part 1!");
@@ -6,6 +7,7 @@ pub fn run() {
     part_2(lines);
 }
 
+// Function that takes a string and gets the first and last number and merges then and returns it as a int
 fn calc_number(line: &str) -> u32 {
     let mut num_chars: Vec<char> = Vec::new();
     let char_vec: Vec<char> = line.chars().collect();
@@ -29,6 +31,7 @@ fn calc_number(line: &str) -> u32 {
     number
 }
 
+// Function for part 1
 fn part_1(lines: &str) {
     let mut sum_total: u32 = 0;
 
@@ -39,6 +42,7 @@ fn part_1(lines: &str) {
     println!("Sum of calibration values: {}", sum_total);
 }
 
+// Function for part 2
 fn part_2(lines: &str) {
     let mut sum_total: u32 = 0;
 
