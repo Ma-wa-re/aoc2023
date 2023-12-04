@@ -1,5 +1,3 @@
-
-
 pub fn run() {
     let mut input_lines: Vec<Vec<char>> = Vec::new();
 
