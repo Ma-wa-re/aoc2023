@@ -25,13 +25,13 @@ struct NumberLocation{
 }
 
 fn parse_input(input_lines: &Vec<Vec<char>>) -> (Vec<SymbolLocation>, Vec<NumberLocation>) {
-    let char_vec: Vec<char> = vec!['!','@','#','$','%','^','&','*','+','-','/','=', '_'];
+    // let char_vec: Vec<char> = vec!['!','@','#','$','%','^','&','*','+','-','/','=', '_'];
     // Get symbol locations
     let mut symbol_locations: Vec<SymbolLocation> = Vec::new();
 
     for input_line in input_lines.iter().enumerate() {
         for input_char in input_line.1.iter().enumerate() {
-            if char_vec.contains(&input_char.1) {
+            if input_char.1.is_ascii_punctuation() && *input_char.1 != '.' && *input_char.1 != '\\'{
                 symbol_locations.push(SymbolLocation(*input_char.1, input_line.0, input_char.0));
             }
         }
@@ -41,11 +41,11 @@ fn parse_input(input_lines: &Vec<Vec<char>>) -> (Vec<SymbolLocation>, Vec<Number
     let mut number_locations: Vec<NumberLocation> = Vec::new();
 
     let mut number_string: String = String::new();
-    let mut start_loc: usize = 9999999;
+    let mut start_loc: usize = 1000;
     for input_line in input_lines.iter().enumerate() {
         for input_char in input_line.1.iter().enumerate() {
             if input_char.1.is_numeric() {
-                if start_loc == 9999999 {
+                if start_loc == 1000 {
                     start_loc = input_char.0
                 }
                 number_string.push(*input_char.1);
@@ -53,14 +53,21 @@ fn parse_input(input_lines: &Vec<Vec<char>>) -> (Vec<SymbolLocation>, Vec<Number
             else {
                 if !number_string.is_empty() {
                     number_locations.push(
-                        NumberLocation { number: number_string.trim().parse().unwrap(), line: input_line.0, start_location: start_loc, end_location: input_char.0 }
+                        NumberLocation { number: number_string.trim().parse().unwrap(), line: input_line.0, start_location: start_loc, end_location: input_char.0-1 }
                     );
                     number_string = String::new();
-                    start_loc = 9999999;
+                    start_loc = 1000;
                 }
             }
         }
-        start_loc = 9999999;
+        // If we get to the end of the line check if we have a number and if so push it then reset 
+        if !number_string.is_empty() {
+            number_locations.push(
+                NumberLocation { number: number_string.trim().parse().unwrap(), line: input_line.0, start_location: start_loc, end_location: input_line.1.len()-1 }
+            );
+        }
+        number_string = String::new();  
+        start_loc = 1000;
     }
 
     return (symbol_locations, number_locations)
@@ -75,11 +82,11 @@ fn part_1(symbol_locations: &Vec<SymbolLocation>, number_locations: &Vec<NumberL
         let char_start_num: usize = if symbol.2 == 0 {symbol.2} else {symbol.2-1};
         
         for number in number_locations {
-            let line_range: Vec<usize> = (line_start_num..symbol.1+2).collect();
+            let line_range: Vec<usize> = (line_start_num..(symbol.1+2)).collect();
 
             let in_line_range = line_range.contains(&number.line);
             
-            let num_char_range: Vec<usize> = (number.start_location..number.end_location).collect();
+            let num_char_range: Vec<usize> = (number.start_location..number.end_location+1).collect();
 
             let mut in_char_range: bool = false;
             
