@@ -11,6 +11,9 @@ pub fn run() {
 
     println!("Part 1!");
     part_1(&symbol_locations, &number_locations);
+
+    println!("Part 2!");
+    part_2(&symbol_locations, &number_locations);
 }
 
 #[derive(Debug)]
@@ -105,4 +108,47 @@ fn part_1(symbol_locations: &Vec<SymbolLocation>, number_locations: &Vec<NumberL
     }
 
     println!("Part number sum: {}", part_sum);
+}
+
+fn part_2(symbol_locations: &Vec<SymbolLocation>, number_locations: &Vec<NumberLocation>) {
+    let mut gear_sum: usize = 0;
+
+    for symbol in symbol_locations {
+
+        if &symbol.0 != &'*' {
+            continue;
+        }
+
+        let mut gears: Vec<usize> = Vec::new();
+        
+        let line_start_num: usize = if symbol.1 == 0 {symbol.1} else {symbol.1-1};
+        let char_start_num: usize = if symbol.2 == 0 {symbol.2} else {symbol.2-1};
+        
+        for number in number_locations {
+            let line_range: Vec<usize> = (line_start_num..(symbol.1+2)).collect();
+
+            let in_line_range = line_range.contains(&number.line);
+            
+            let num_char_range: Vec<usize> = (number.start_location..number.end_location+1).collect();
+
+            let mut in_char_range: bool = false;
+            
+            for val in num_char_range {
+                if (char_start_num..symbol.2+2).contains(&val) {
+                    in_char_range = true;
+                    break;
+                }
+            }
+
+            if in_line_range && in_char_range {
+                gears.push(number.number)
+            }
+        }
+
+        if gears.len() == 2 {
+            gear_sum += gears[0] * gears[1];
+        }
+    }
+
+    println!("Gear ratios sum: {}", gear_sum);
 }
