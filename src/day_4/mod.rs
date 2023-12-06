@@ -74,7 +74,7 @@ fn part_1(games: &Vec<Game>) {
     let mut total_points: usize = 0;
 
     for game in games {
-        // println!("Game {}: {}", game.number, game.points());
+        println!("Game {}: {}", game.number, game.points());
         total_points += game.points()
     }
 
